@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Музей истории школы №12</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    
+    /* Голубь мира в углу */
+    .dove-of-peace {
+      position: absolute;
+      top: -5px;
+      right: 20px;
+      z-index: 5;
+      pointer-events: none;
+      transform: rotate(-15deg);
+      opacity: 0.25; 
+    }
+
+    /* Модалка */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.6);
+      display: none; align-items: center; justify-content: center; z-index: 200;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    
+    .main-photo {
+      width: 100%; max-height: 50vh; object-fit: contain; 
+      display: block; margin: 0 auto; border-radius: 8px;
+      opacity: 1;
+      transition: opacity 0.3s ease; /* Добавлен плавный переход для устранения лагов */
+    }
+    .thumbs img { border: 2px solid transparent; cursor: pointer; transition: 0.2s; }
+    .thumbs img.active { border-color: #059669; }
+  </style>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+
+  <!-- ШАПКА -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/50">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between relative overflow-hidden">
+      
+      <!-- Голубь мира (черный) -->
+      <div class="dove-of-peace">
+        <iconify-icon icon="mdi:dove" class="text-7xl text-black"></iconify-icon>
+      </div>
+
+      <!-- Логотип с аватаркой -->
+      <a href="#hero" class="flex items-center gap-2.5 font-bold text-emerald-700 text-sm md:text-base z-10">
+        <img src="avatar.jpg" class="w-9 h-9 rounded-full object-cover border-2 border-emerald-600 shadow-sm bg-slate-200" alt="Логотип музея">
+        <span>Музей школы №12</span>
+      </a>
+
+      <!-- Навигация -->
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium z-10">
+        <a href="#about" class="text-slate-600 hover:text-emerald-600 transition-colors">О музее</a>
+        <a href="#exhibits" class="text-slate-600 hover:text-emerald-600 transition-colors">Экспонаты</a>
+        <a href="#game" class="text-slate-600 hover:text-emerald-600 transition-colors">Игра</a>
+        <a href="#team" class="text-slate-600 hover:text-emerald-600 transition-colors">Команда</a>
+      </div>
+      <button id="mobileMenuBtn" class="md:hidden text-slate-600 z-10">
+        <iconify-icon icon="solar:hamburger-menu-linear" class="text-2xl"></iconify-icon>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden bg-white/90 backdrop-blur-xl border-t border-slate-200/50 px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+      <a href="#about" class="py-1 mobile-link">О музее</a>
+      <a href="#exhibits" class="py-1 mobile-link">Экспонаты</a>
+      <a href="#game" class="py-1 mobile-link">Игра</a>
+      <a href="#team" class="py-1 mobile-link">Команда</a>
+    </div>
+  </nav>
+
+  <!-- ГЛАВНАЯ (С фоновым изображением) -->
+  <section id="hero" class="relative pt-28 pb-20 md:pt-40 md:pb-28 bg-black text-white overflow-hidden">
+    <!-- Фоновое изображение -->
+    <img src="avatar.jpg" alt="Фон музея" class="absolute inset-0 w-full h-full object-cover opacity-50">
+    
+    <!-- Затемняющий градиент поверх картинки -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70"></div>
+
+    <!-- Контент -->
+    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4 drop-shadow-lg">Музей истории школы №12</h1>
+      <p class="text-white/80 text-base md:text-lg max-w-xl mx-auto leading-relaxed mb-8 drop-shadow-md">
+        Интерактивная экспозиция, посвящённая истории школы и её выпускникам. Отсканируйте QR-код у стенда, чтобы узнать больше!
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="#exhibits" class="inline-flex items-center gap-2 bg-emerald-600 text-white text-sm font-medium px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors shadow-lg">
+          Перейти к экспонатам
+          <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+        </a>
+        <a href="#game" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white text-sm font-medium px-6 py-3 rounded-lg hover:bg-white/20 transition-colors shadow-lg">
+          <iconify-icon icon="solar:gamepad-bold" class="text-lg"></iconify-icon>
+          Сыграть в игру
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- О МУЗЕЕ (Белый фон) -->
+  <section id="about" class="py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-8 text-center">Общие сведения</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+          <div class="space-y-3 text-sm text-slate-700">
+            <p><strong>Название музея:</strong> Музей истории школы №12</p>
+            <p><strong>Профиль:</strong> историко‑краеведческий</p>
+            <p><strong>Фонд:</strong> около 700 единиц хранения</p>
+            <p><strong>Цель приложения:</strong> интерактивная экспозиция</p>
+            <p><strong>Целевая аудитория:</strong> посетители музея любого возраста</p>
+          </div>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+          <div class="space-y-4">
+            <div class="flex gap-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                <iconify-icon icon="solar:book-2-bold" class="text-emerald-600"></iconify-icon>
+              </div>
+              <div>
+                <h3 class="font-semibold text-sm mb-0.5">Исследовательская работа</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Ученики ведут поиск, собирают воспоминания ветеранов и изучают архивы.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                <iconify-icon icon="solar:hand-heart-bold" class="text-emerald-600"></iconify-icon>
+              </div>
+              <div>
+                <h3 class="font-semibold text-sm mb-0.5">Связь поколений</h3>
+                <p class="text-slate-500 text-xs leading-relaxed">Выпускники передают новые экспонаты и делятся школьными воспоминаниями.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЭКСПОНАТЫ (Более темный серый фон) -->
+  <section id="exhibits" class="py-16 bg-slate-100">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-2 text-center">Экспонаты</h2>
+      <p class="text-slate-500 text-sm text-center mb-8">Нажмите на карточку, чтобы посмотреть фотографии и описание</p>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Зал 1 -->
+        <div class="group bg-white rounded-xl overflow-hidden border border-slate-100 hover:shadow-lg hover:-translate-y-2 transition-all duration-300 cursor-pointer exhibit-card" data-exhibit="ww2">
+          <img src="exponat1.jpg" alt="Зал ВОВ" class="w-full aspect-[4/3] object-cover bg-slate-200">
+          <div class="p-4">
+            <h3 class="font-bold mb-1">Великая Отечественная война</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Стенд с фотографиями учителей и выпускников, ушедших на фронт.</p>
+          </div>
+        </div>
+
+        <!-- Зал 2 -->
+        <div class="group bg-white rounded-xl overflow-hidden border border-slate-100 hover:shadow-lg hover:-translate-y-2 transition-all duration-300 cursor-pointer exhibit-card" data-exhibit="prerev">
+          <img src="экскурсия2/3.jpg" alt="Музейные мероприятия" class="w-full aspect-[4/3] object-cover bg-slate-200">
+          <div class="p-4">
+            <h3 class="font-bold mb-1">Музейные мероприятия</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Информация о меротиятиях, проходящих в музее.</p>
+          </div>
+        </div>
+
+        <!-- Зал 3 -->
+        <div class="group bg-white rounded-xl overflow-hidden border border-slate-100 hover:shadow-lg hover:-translate-y-2 transition-all duration-300 cursor-pointer exhibit-card" data-exhibit="hall4">
+          <img src="стенды/1.jpg" alt="Стенды" class="w-full aspect-[4/3] object-cover bg-slate-200">
+          <div class="p-4">
+            <h3 class="font-bold mb-1">Стенды</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Стенды расположеные в музее.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ИНТЕРАКТИВНАЯ ИГРА (Теплый янтарный фон) -->
+  <section id="game" class="py-16 bg-amber-50/40">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="max-w-2xl mx-auto bg-white rounded-2xl p-8 border border-amber-200 shadow-sm text-center">
+        <div class="inline-flex items-center gap-2 bg-amber-50 border border-amber-100 rounded-full px-3 py-1 mb-4 text-xs font-semibold text-amber-700">
+          <iconify-icon icon="solar:gamepad-bold" class="text-sm"></iconify-icon>
+          Интерактивная игра
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">Исторический квест</h2>
+        <p class="text-slate-500 text-sm leading-relaxed mb-6">
+          Проверьте свои знания! Внимательно прочитайте подсказку и введите правильный ответ.
+        </p>
+        
+        <div class="bg-amber-50/50 rounded-xl p-6 border border-amber-100 text-left mb-6">
+          <h3 class="font-bold text-base mb-2 flex items-center gap-2">
+            <iconify-icon icon="solar:question-circle-bold" class="text-emerald-600 text-xl"></iconify-icon>
+            Задание:
+          </h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            В Зале боевой славы хранится память о выпускниках и учителях. Именем какого прославленного лётчика, Дважды Героя Советского Союза, названа улица, на которой находится наш лицей? В 1943 году в районе Синявино его парашют не раскрылся...
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <input type="text" id="game-answer" placeholder="Введите фамилию..." autocomplete="off" class="flex-1 px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all" onkeypress="if(event.key === 'Enter') checkGameAnswer()">
+          <button onclick="checkGameAnswer()" class="bg-emerald-600 text-white text-sm font-medium px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors whitespace-nowrap">
+            Проверить
+          </button>
+        </div>
+        <div id="game-result" class="mt-4 text-sm font-semibold hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КОМАНДА (Светло-серый фон) -->
+  <section id="team" class="py-16 bg-slate-50">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-8 text-center">Команда разработчиков</h2>
+      <div class="grid sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
+        <div class="bg-white rounded-xl p-5 text-center border border-slate-100">
+          <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <iconify-icon icon="solar:user-bold" class="text-emerald-600 text-2xl"></iconify-icon>
+          </div>
+          <h3 class="font-bold text-sm">Роман Шамоинин</h3>
+          <p class="text-slate-500 text-xs mt-1">Идея, контент</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 text-center border border-slate-100">
+          <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <iconify-icon icon="solar:palette-bold" class="text-emerald-600 text-2xl"></iconify-icon>
+          </div>
+          <h3 class="font-bold text-sm">Роман Шамоинин</h3>
+          <p class="text-slate-500 text-xs mt-1">Дизайн</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 text-center border border-slate-100">
+          <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <iconify-icon icon="solar:camera-bold" class="text-emerald-600 text-2xl"></iconify-icon>
+          </div>
+          <h3 class="font-bold text-sm">Роман Шамоинин</h3>
+          <p class="text-slate-500 text-xs mt-1">Материалы</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПОДВАЛ (Темный фон) -->
+  <footer class="bg-slate-900 text-white py-8">
+    <div class="max-w-5xl mx-auto px-4 text-center text-sm text-slate-400">
+      <p>Музей истории школы №12 brss &copy; 2026</p>
+      <p class="text-xs mt-1">Приложение создано для веб-хакатона «Моя милая малая Родина»</p>
+    </div>
+  </footer>
+
+  <!-- МОДАЛКА ЭКСПОНАТОВ -->
+  <div class="modal-overlay" id="overlay">
+    <div class="bg-white w-[95%] max-w-3xl max-h-[90vh] rounded-xl p-5 md:p-8 flex flex-col overflow-y-auto shadow-xl relative">
+      <button class="absolute top-3 right-3 text-slate-400 hover:text-slate-900 transition-colors z-10" id="close-modal">
+        <iconify-icon icon="solar:close-circle-bold" class="text-3xl"></iconify-icon>
+      </button>
+      
+      <h2 id="modal-title" class="text-xl md:text-2xl font-bold mb-6 pr-8"></h2>
+
+      <div id="people-list" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+
+      <div id="person-view" class="hidden">
+        <button id="back" class="inline-flex items-center gap-1 text-sm text-emerald-600 font-medium hover:text-emerald-800 mb-5 transition-colors">
+          <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Назад к списку
+        </button>
+        <img id="main-photo" class="main-photo border border-slate-100" src="" alt="Фото">
+        <div class="thumbs grid grid-cols-4 md:grid-cols-6 gap-2 mt-3" id="thumbs"></div>
+        <div class="bio mt-6 text-slate-600 text-sm leading-relaxed" id="bio"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СКРИПТЫ -->
+  <script>
+    // --- Мобильное меню ---
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('hidden', !menuOpen);
+    });
+    
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // --- Интерактивная игра ---
+    function checkGameAnswer() {
+      const input = document.getElementById('game-answer');
+      const resultDiv = document.getElementById('game-result');
+      const answer = input.value.trim().toLowerCase();
+
+      resultDiv.classList.remove('hidden');
+      
+      if (answer === "кравченко") {
+        resultDiv.textContent = "✅ Верно! Вы отлично знаете историю школы и лицея!";
+        resultDiv.className = "mt-4 text-sm font-semibold text-emerald-600";
+      } else if (answer === "") {
+        resultDiv.textContent = "⚠️ Пожалуйста, введите ответ.";
+        resultDiv.className = "mt-4 text-sm font-semibold text-amber-600";
+      } else {
+        resultDiv.textContent = "❌ Неверно. Попробуйте ещё раз! Подсказка: обратите внимание на мемориальную доску на здании лицея.";
+        resultDiv.className = "mt-4 text-sm font-semibold text-red-600";
+      }
+    }
+
+    // --- База данных экспонатов ---
+    const EXHIBITS = {
+      ww2: {
+        title: "Участники Великой Отечественной Войны",
+        items: {
+          butorin: {
+            name: "Буторин Пётр Михайлович",
+            photo: "butorin/1.jpg",
+            photos: ["butorin/1.jpg", "butorin/2.jpg", "butorin/3.jpg"],
+            bio: `Буторин Пëтр Михайлович⭐<br><br>Учитель русского языка и литературы ✍️<br>Директор Курганской средней школы 12.<br>Был призван на фронт в 1941 году.<br>"Весь мир пылает, а мы в самом пекле. Но не всех же убивают", - успокаивал солдат жену и троих маленьких сыновей.<br>В 1942 году подо Ржевом Буторин Пётр Михайлович был смертельно ранен осколком в живот.`
+          },
+          vermienko: {
+            name: "Вермиенко Николай Васильевич",
+            photo: "vermienko/1.jpg",
+            photos: ["vermienko/1.jpg", "vermienko/2.jpg", "vermienko/3.jpg", "vermienko/4.jpg"],
+            bio: `Вермиенко Николай Васильевич⭐<br><br>Директор Курганской средней школы 12.<br>В 1942 году был призван в ряды Красной Армии.<br>За храбрость и отвагу, проявленные в боях, был награждён орденом Красного Знамени.<br>Николай Васильевич погиб при освобождении Запорожья от немецких захватчиков в 1943 году`
+          },
+          kravchenko: {
+            name: "Кравченко Григорий Пантелеевич",
+            photo: "kravchenko/1.jpg",
+            photos: ["kravchenko/1.jpg", "kravchenko/2.jpg", "kravchenko/3.jpg"],
+            bio: `Кравченко Григорий Пантелеевич⭐<br><br>Именем этого Дважды Героя Советского Союза названа улица, на которой находится лицей 12.<br>Родился Григорий Кравченко на Украине в 1912 году, но с 1923 года семья жила в селе Звериноголовское Курганской области.<br>В годы Великой Отечественной войны командовал авиационными соединениями на Западном, Брянском, Юго-Западном, Калининском, Волховском фронтах. Участвовал в Смоленском сражении, в боях на орловском направлении и в прорыве блокады Ленинграда✈️<br>Погиб 23 февраля 1943 года на истребителе в воздушном бою в районе посёлка Синявино Ленинградской области.<br>Григорий Пантелеевич катапультировался с подбитого самолёта, но его парашют не раскрылся.<br>На здании лицея установлена мемориальная доска Кравченко Григорию Пантелеевичу`
+          },
+          nassar: {
+            name: "Нассар Надежда Васильевна",
+            photo: "nassar/1.jpg",
+            photos: ["nassar/1.jpg", "nassar/2.jpg", "nassar/3.jpg"],
+            bio: `Нассар Надежда Васильевна⭐<br><br>Учитель русского языка и литературы Курганской средней школы 12✍️<br>Заслуженный учитель РСФСР.<br>Надежда Васильевна вспоминала о военном времени:<br>"Зимой наступил страшный холод. Чернила замерзали, ученики держали чернильницы под мышкой, согревая их своим телом. Не было тетрадей, писали на старых контурных картах и старых обоях"📝`
+          }
+        }
+      },
+      prerev: {
+        title: "Музейные мероприятия",
+        items: {
+          first_teacher: {
+            name: "Экскурсия для третьих классов",
+            photo: "экскурсия/4.jpg",
+            photos: ["экскурсия/1.jpg","экскурсия/2.jpg","экскурсия/3.jpg","экскурсия/4.jpg","экскурсия/5.jpg","экскурсия/6.jpg"],
+            bio: `Экскурсия про нашу школу для третьих классов⭐<br><br>два дружных третьих класса отправились в увлекательное путешествие по истории родной школы.
+Ребята узнали, как всё начиналось и как выглядела школа много лет назад.
+Гордимся историей нашей школы! 💯
+Благодарим юных экскурсоводов😍👯.`
+          },
+          first_building: {
+            name: "Экскурсия для четвертых классов",
+            photo: "экскурсия2/3.jpg",
+            photos: ["экскурсия2/1.jpg","экскурсия2/2.jpg","экскурсия2/3.jpg","экскурсия2/4.jpg","экскурсия2/5.jpg"],
+            bio: `Экскурсия для четвертых классов⭐<br><br>Третьеклассники внимательно слушали, ловили каждое слово.
+Настоящим открытием для них стали чертежи семиклассников военного времени⭐✍️
+Вот так, через пожелтевшие листы и строгие чертежи, и рождается связь времён📜
+Спасибо вам, наши маленькие слушатели, за ваше внимание и искренний интерес! Вы - лучшие экскурсанты!👫.`
+          }
+        }
+      },
+      hall4: {
+        title: "Стенды в музее",
+        items: {
+          exhibit1: {
+            name: "Стенды",
+            photo: "стенды/1.jpg",
+            photos: ["стенды/1.jpg","стенды/2.jpg","стенды/3.jpg"],
+            bio: `Стенды, расположеные в Музее Школы 12`
+          }
+        }
+      }
+    };
+
+    // --- Логика модального окна ---
+    const overlay = document.getElementById('overlay');
+    const modalTitle = document.getElementById('modal-title');
+    const peopleList = document.getElementById('people-list');
+    const personView = document.getElementById('person-view');
+    const mainPhoto = document.getElementById('main-photo');
+    const thumbs = document.getElementById('thumbs');
+    const bio = document.getElementById('bio');
+    let currentExhibit = null;
+
+    document.querySelectorAll('.exhibit-card').forEach(card => {
+      card.onclick = () => {
+        currentExhibit = EXHIBITS[card.dataset.exhibit];
+        modalTitle.innerText = currentExhibit.title;
+        renderPeopleList();
+        overlay.classList.add('active');
+      };
+    });
+
+    document.getElementById('close-modal').onclick = () => overlay.classList.remove('active');
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.classList.remove('active'); };
+
+    document.getElementById('back').onclick = () => {
+      personView.classList.add('hidden');
+      peopleList.classList.remove('hidden');
+    };
+
+    function renderPeopleList() {
+      peopleList.innerHTML = "";
+      personView.classList.add('hidden');
+      peopleList.classList.remove('hidden');
+
+      for (let key in currentExhibit.items) {
+        const item = currentExhibit.items[key];
+        const card = document.createElement('div');
+        card.className = 'bg-slate-50 rounded-lg p-3 text-center cursor-pointer hover:bg-emerald-50 transition-colors border border-slate-100 hover:border-emerald-200';
+        
+        const photoHtml = item.photo 
+          ? `<img src="${item.photo}" alt="${item.name}" class="w-full aspect-square object-cover rounded-md mb-2 bg-slate-200">` 
+          : `<div class="w-full aspect-square rounded-md mb-2 bg-slate-200"></div>`;
+
+        card.innerHTML = `
+          ${photoHtml}
+          <div class="text-xs font-semibold text-slate-700">${item.name}</div>
+        `;
+        card.onclick = () => showPerson(key);
+        peopleList.appendChild(card);
+      }
+    }
+
+    function showPerson(key) {
+      const p = currentExhibit.items[key];
+      peopleList.classList.add('hidden');
+      personView.classList.remove('hidden');
+
+      // Плавная загрузка главного фото
+      mainPhoto.style.opacity = 0; 
+      mainPhoto.src = p.photo;
+      if(!p.photo) {
+        mainPhoto.style.display = 'none';
+      } else {
+        mainPhoto.style.display = 'block';
+        // Даем браузеру время на подгрузку, затем плавно показываем
+        setTimeout(() => { mainPhoto.style.opacity = 1; }, 50);
+      }
+
+      bio.innerHTML = p.bio;
+      
+      thumbs.innerHTML = "";
+      p.photos.forEach((src, i) => {
+        if (src) {
+          const img = document.createElement("img");
+          img.src = src;
+          img.loading = "lazy"; // Оптимизация загрузки
+          img.decoding = "async"; // Отрисовка без блокировки потока
+          img.className = "w-full aspect-square object-cover rounded-md bg-slate-200";
+          if (i === 0) img.classList.add("active");
+          
+          img.onclick = () => {
+            // Ищем активные классы только внутри блока thumbs (работает быстрее)
+            thumbs.querySelectorAll('.active').forEach(t => t.classList.remove("active"));
+            img.classList.add("active");
+            
+            // Плавная смена фото: сначала гасим, меняем src, потом проявляем
+            mainPhoto.style.opacity = 0;
+            setTimeout(() => {
+              mainPhoto.src = src;
+              mainPhoto.style.opacity = 1;
+            }, 300); // Время совпадает с CSS transition
+          };
+          
+          thumbs.appendChild(img);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
